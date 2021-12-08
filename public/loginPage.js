@@ -2,23 +2,22 @@
 
 const userForm = new UserForm(); //создаём объект класса UserForm
 
-const data = userForm.getData(userForm.loginForm); //создаём объект data, со свойствами логина и пароля, взятыми из текущей формы
+userForm.loginFormCallback = (data) => {
+    ApiConnector.login(data, (response) => {
+        console.log(response);
+        if (response.success === false) alert(response.error) // проверка успешности авторизации
+        else location.reload();
+    });
+}
 
-let login = data.login; //присваиваем переменной login значение логина из формы
-let password = data.password; //присваиваем переменной password значение пароля из формы
+userForm.registerFormCallback = (data) => {
+    ApiConnector.register(data, (response) => {
+        console.log(response);
+        if (response.success === false) alert(response.error) // проверка успешности регистрации
+        else location.reload();
+    });
+}
 
-
-
-const func = ({login,password}) => { //функция для выполнения запроса попытки авторизации на сервер, аргументом которой является объект с двумя заранее известными свойствами
-    
-    ApiConnector.login(login, password, () => { // запрос на авторизацию
-        userForm.loginFormAction(login,password); // функция, выполняемая при попытке авторизации
-    }    
-    );
-};
-
-
-userForm.loginFormCallback = func(data); //присваиваем свойству созданного объекта значение функции func с аргументом data
 
 
 
